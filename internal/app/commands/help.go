@@ -8,7 +8,7 @@ import (
 func (c *Commander) Help(message *tgbotapi.Message) {
 	log.Printf("[%s] %s", message.From.UserName, message.Text)
 
-	msg := tgbotapi.NewMessage(message.Chat.ID, "Commands:\n/help - help\n/list - products list")
+	msg := tgbotapi.NewMessage(message.Chat.ID, "Commands:\n/help - help\n/list - products list\n/get [index] - concrete product")
 
 	c.bot.Send(msg)
 }

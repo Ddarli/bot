@@ -14,9 +14,11 @@ func (c *Commander) Default(message *tgbotapi.Message) {
 }
 
 func (c *Commander) HandleUpdate(update tgbotapi.Update) {
-	if update.Message == nil {
-		return
-	}
+	defer func() {
+		if panicMsg := recover(); panicMsg != nil {
+			log.Println(panicMsg)
+		}
+	}()
 	switch update.Message.Command() {
 	case "help":
 		c.Help(update.Message)
