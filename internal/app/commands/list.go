@@ -1,18 +1,29 @@
 package commands
 
 import (
+	"encoding/json"
+	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
-	"strings"
 )
 
 func (c *Commander) List(message *tgbotapi.Message) {
 	log.Printf("[%s] %s", message.From.UserName, message.Text)
 	products := ""
-	for _, v := range c.productService.List() {
-		products += v.Title + "\n"
+	for i, v := range c.productService.List() {
+		products += fmt.Sprintf("%v. %s\n", i+1, v.String())
 	}
-	msg := tgbotapi.NewMessage(message.Chat.ID, strings.TrimSpace(products))
+	msg := tgbotapi.NewMessage(message.Chat.ID, products)
+
+	serializedData, _ := json.Marshal(CommandData{
+		Offset: 21,
+	})
+
+	msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("Next page", string(serializedData)),
+		),
+	)
 
 	c.bot.Send(msg)
 }

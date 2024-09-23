@@ -5,13 +5,13 @@ import (
 	"strconv"
 )
 
-func (c *Commander) Get(message *tgbotapi.Message) {
+func (c *Commander) Read(message *tgbotapi.Message) {
 	args := message.CommandArguments()
 	idx, err := strconv.Atoi(args)
 	if err != nil {
 		panic("Illegal index")
 	}
-	prod, err := c.productService.GetById(idx)
+	prod, err := c.productService.Get(idx)
 	if err != nil {
 		panic("Product not found")
 	}
